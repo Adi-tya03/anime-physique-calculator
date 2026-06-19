@@ -46,7 +46,7 @@ try{
 
 await axios.post(
 
-"http://127.0.0.1:8000/auth/register",
+"https://anime-physique-calculator.onrender.com/auth/register",
 
 {
 
