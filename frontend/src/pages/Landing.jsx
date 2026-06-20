@@ -5,10 +5,10 @@ import { Link } from "react-router-dom";
 
 export default function Landing() {
   const heroes = [
-    { name: "Goku", image: "/images/goku.png" },
-    { name: "Baki", image: "/images/baki.png" },
-    { name: "Toji", image: "/images/toji.png" },
-    { name: "Broly", image: "/images/broly.png" },
+    { name: "Goku", image: "/images/characters/goku.png" },
+    { name: "Baki", image: "/images/characters/baki.png" },
+    { name: "Toji", image: "/images/characters/toji.png" },
+    { name: "Broly", image: "/images/characters/broly.png" },
   ];
 
   const [currentHero, setCurrentHero] = useState(0);
@@ -16,11 +16,9 @@ export default function Landing() {
 
   useEffect(() => {
     if (isPaused) return;
-
     const interval = setInterval(() => {
       setCurrentHero((prev) => (prev + 1) % heroes.length);
     }, 4000);
-
     return () => clearInterval(interval);
   }, [isPaused]);
 
@@ -31,18 +29,21 @@ export default function Landing() {
 
       <Navbar />
 
-      <main className="relative z-10 max-w-7xl mx-auto min-h-screen px-8 pt-32 pb-8 grid md:grid-cols-2 items-center gap-10">
+      <main className="relative z-10 max-w-7xl mx-auto min-h-screen px-6 pt-28 pb-12 flex flex-col md:grid md:grid-cols-2 items-center gap-8">
+
+        {/* Text content */}
         <motion.div
           initial={{ opacity: 0, y: 28 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8 }}
+          className="text-center md:text-left"
         >
           <div className="inline-flex items-center gap-2 mb-6 rounded-full border border-cyan-400/20 bg-cyan-400/5 px-4 py-2 text-sm text-cyan-300">
             <span className="h-2 w-2 rounded-full bg-cyan-300 shadow-[0_0_18px_#22d3ee]" />
             AI POWERED PHYSIQUE MATCHING
           </div>
 
-          <h1 className="max-w-3xl text-4xl md:text-6xl font-black leading-[1.05] tracking-[-0.04em]">
+          <h1 className="text-4xl md:text-6xl font-black leading-[1.05] tracking-[-0.04em]">
             UNLOCK YOUR
             <br />
             <span className="text-white">ANIME-LEVEL</span>
@@ -52,13 +53,13 @@ export default function Landing() {
             </span>
           </h1>
 
-          <p className="mt-6 max-w-xl text-base md:text-lg leading-8 text-slate-300">
+          <p className="mt-6 max-w-xl text-base md:text-lg leading-8 text-slate-300 mx-auto md:mx-0">
             Calculate your body stats, discover your closest anime physique
             match, and generate a personalized AI roadmap to train like your
             target character.
           </p>
 
-          <div className="mt-8">
+          <div className="mt-8 flex justify-center md:justify-start">
             <Link to="/calculator">
               <button className="rounded-2xl bg-cyan-400 px-7 py-4 font-bold text-[#050816] shadow-[0_0_35px_rgba(34,211,238,0.35)] transition hover:scale-105 hover:bg-cyan-300">
                 Start Analysis
@@ -67,25 +68,19 @@ export default function Landing() {
           </div>
         </motion.div>
 
-        {/* Character carousel - float animation is on the wrapper, character swap is inside */}
+        {/* Character carousel — visible on ALL screen sizes */}
         <div
-          className="hidden md:flex justify-center items-center"
+          className="flex justify-center items-center w-full"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          {/* Floating wrapper - separate from AnimatePresence */}
           <motion.div
             animate={{ y: [0, -12, 0] }}
-            transition={{
-              duration: 4,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-            className="relative w-[430px] h-[520px] flex items-center justify-center"
+            transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+            className="relative w-[280px] h-[340px] md:w-[430px] md:h-[520px] flex items-center justify-center"
           >
-            <div className="absolute bottom-10 w-[320px] h-[90px] rounded-full bg-black/50 blur-2xl scale-x-125" />
+            <div className="absolute bottom-6 w-[200px] md:w-[320px] h-[60px] md:h-[90px] rounded-full bg-black/50 blur-2xl scale-x-125" />
 
-            {/* Character swap - clean instant cut on hover, transition when auto-cycling */}
             <AnimatePresence mode="wait">
               <motion.img
                 key={heroes[currentHero].name}
@@ -96,7 +91,7 @@ export default function Landing() {
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 1.04 }}
                 transition={{ duration: isPaused ? 0 : 0.5 }}
-                className="relative z-10 h-[500px] object-contain select-none pointer-events-none drop-shadow-[0_35px_45px_rgba(0,0,0,0.65)]"
+                className="relative z-10 h-[320px] md:h-[500px] object-contain select-none pointer-events-none drop-shadow-[0_35px_45px_rgba(0,0,0,0.65)]"
               />
             </AnimatePresence>
 
@@ -106,10 +101,10 @@ export default function Landing() {
                 <button
                   key={i}
                   onClick={() => setCurrentHero(i)}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                  className={`h-2 rounded-full transition-all duration-300 ${
                     i === currentHero
                       ? "bg-cyan-400 w-5"
-                      : "bg-white/30 hover:bg-white/60"
+                      : "bg-white/30 hover:bg-white/60 w-2"
                   }`}
                 />
               ))}
