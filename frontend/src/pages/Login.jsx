@@ -27,65 +27,34 @@ const [error, setError] = useState("");
 
 
 const handleLogin = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError("");
 
-e.preventDefault();
+  try {
+    const formData = new FormData();
+    formData.append("username", email);
+    formData.append("password", password);
 
-setLoading(true);
+    const response = await axios.post(
+      "https://anime-physique-calculator.onrender.com/auth/login",
+      formData
+    );
 
-setError("");
+    const token = response.data.access_token;
+    console.log("Token received:", token); // debug line
 
-try {
+    localStorage.setItem("token", token);
+    console.log("Token saved:", localStorage.getItem("token")); // debug line
 
-const formData = new FormData();
+    navigate("/calculator");  // ← go directly to protected route to confirm token works
 
-formData.append("username", email);
-
-formData.append("password", password);
-
-
-const response = await axios.post(
-
-"https://anime-physique-calculator.onrender.com/auth/login",
-
-formData
-
-);
-
-
-localStorage.setItem(
-
-"token",
-
-response.data.access_token
-
-);
-
-
-navigate("/");
-
-}
-
-catch (err) {
-
-setError(
-
-err.response?.data?.detail ||
-
-"Login Failed"
-
-);
-
-}
-
-finally {
-
-setLoading(false);
-
-}
-
+  } catch (err) {
+    setError(err.response?.data?.detail || "Login Failed");
+  } finally {
+    setLoading(false);
+  }
 };
-
-
 
 return (
 
