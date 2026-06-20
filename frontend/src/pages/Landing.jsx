@@ -27,7 +27,6 @@ export default function Landing() {
   return (
     <div className="min-h-screen bg-[#050816] relative overflow-hidden text-white">
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(124,58,237,0.22),transparent_32%),radial-gradient(circle_at_85%_70%,rgba(6,182,212,0.18),transparent_30%)]" />
-
       <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.025)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.025)_1px,transparent_1px)] bg-[size:48px_48px]" />
 
       <Navbar />
@@ -68,53 +67,55 @@ export default function Landing() {
           </div>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, scale: 0.9 }}
-          animate={{
-            opacity: 1,
-            scale: 1,
-            y: [0, -12, 0],
-          }}
-          transition={{
-            duration: 4,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
+        {/* Character carousel - float animation is on the wrapper, character swap is inside */}
+        <div
           className="hidden md:flex justify-center items-center"
           onMouseEnter={() => setIsPaused(true)}
           onMouseLeave={() => setIsPaused(false)}
         >
-          <div
-            className="relative w-[430px] h-[520px] flex items-center justify-center"
-            style={{
-              transformStyle: "preserve-3d",
-              perspective: "1000px",
+          {/* Floating wrapper - separate from AnimatePresence */}
+          <motion.div
+            animate={{ y: [0, -12, 0] }}
+            transition={{
+              duration: 4,
+              repeat: Infinity,
+              ease: "easeInOut",
             }}
+            className="relative w-[430px] h-[520px] flex items-center justify-center"
           >
             <div className="absolute bottom-10 w-[320px] h-[90px] rounded-full bg-black/50 blur-2xl scale-x-125" />
 
+            {/* Character swap - clean instant cut on hover, transition when auto-cycling */}
             <AnimatePresence mode="wait">
-              <motion.div
+              <motion.img
                 key={heroes[currentHero].name}
-                initial={{ opacity: 0, scale: 0.9, x: 40 }}
-                animate={{ opacity: 1, scale: 1, x: 0 }}
-                exit={{ opacity: 0, scale: 1.05, x: -40 }}
-                transition={{ duration: 0.6 }}
-                className="relative z-10 h-full flex items-center justify-center"
-                style={{
-                  transform: "translateZ(70px)",
-                }}
-              >
-                <img
-                  src={heroes[currentHero].image}
-                  alt={heroes[currentHero].name}
-                  draggable="false"
-                  className="h-[500px] object-contain select-none pointer-events-none drop-shadow-[0_35px_45px_rgba(0,0,0,0.65)]"
-                />
-              </motion.div>
+                src={heroes[currentHero].image}
+                alt={heroes[currentHero].name}
+                draggable="false"
+                initial={{ opacity: 0, scale: 0.92 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 1.04 }}
+                transition={{ duration: isPaused ? 0 : 0.5 }}
+                className="relative z-10 h-[500px] object-contain select-none pointer-events-none drop-shadow-[0_35px_45px_rgba(0,0,0,0.65)]"
+              />
             </AnimatePresence>
-          </div>
-        </motion.div>
+
+            {/* Dot indicators */}
+            <div className="absolute bottom-0 flex gap-2 z-20">
+              {heroes.map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentHero(i)}
+                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
+                    i === currentHero
+                      ? "bg-cyan-400 w-5"
+                      : "bg-white/30 hover:bg-white/60"
+                  }`}
+                />
+              ))}
+            </div>
+          </motion.div>
+        </div>
       </main>
     </div>
   );
