@@ -11,3 +11,4 @@ httpx
 groq
 reportlab
 python-multipart
+resend
