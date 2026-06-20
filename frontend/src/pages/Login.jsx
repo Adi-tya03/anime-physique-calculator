@@ -47,7 +47,7 @@ const handleLogin = async (e) => {
     localStorage.setItem("token", token);
     console.log("Token saved:", localStorage.getItem("token")); // debug line
 
-    navigate("/calculator");  // ← go directly to protected route to confirm token works
+    navigate("/");  // ← go directly to protected route to confirm token works
 
   } catch (err) {
     setError(err.response?.data?.detail || "Login Failed");
