@@ -90,9 +90,9 @@ def compute_match(user_height, user_weight, user_bf, char):
     weight_diff = abs(user_weight - char.weight_kg)
     bf_diff = abs(user_bf - char.body_fat_percent)
 
-    height_score = max(0, 100 - height_diff * 3.0)
-    weight_score = max(0, 100 - weight_diff * 1.6)
-    bf_score = max(0, 100 - bf_diff * 3.2)
+    height_score = max(0, 100 - height_diff * 2.0)
+    weight_score = max(0, 100 - weight_diff * 1.2)
+    bf_score = max(0, 100 - bf_diff * 2.5)
 
     base_score = (
         height_score * 0.45
@@ -102,22 +102,21 @@ def compute_match(user_height, user_weight, user_bf, char):
 
     difficulty_multiplier = {
         "intermediate": 1.00,
-        "advanced": 0.93,
-        "elite": 0.84,
-        "legendary": 0.72,
-        "impossible": 0.55,
+        "advanced": 0.97,
+        "elite": 0.93,
+        "legendary": 0.88,
+        "impossible": 0.80,
     }
 
-    multiplier = difficulty_multiplier.get(str(char.difficulty).lower(), 0.85)
-
+    multiplier = difficulty_multiplier.get(str(char.difficulty).lower(), 0.90)
     final_score = base_score * multiplier
 
     if height_diff > 25:
-        final_score *= 0.45
+        final_score *= 0.55
     elif height_diff > 18:
-        final_score *= 0.65
+        final_score *= 0.72
     elif height_diff > 12:
-        final_score *= 0.82
+        final_score *= 0.87
 
     return round(max(3.0, min(final_score, 96.0)), 2)
 def compute_bmi(weight_kg, height_cm):
