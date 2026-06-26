@@ -3,8 +3,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from dotenv import load_dotenv
 import os
-
 from pathlib import Path
+
 load_dotenv(Path(__file__).parent / ".env")
 
 DB_HOST = os.getenv("DB_HOST")
@@ -17,7 +17,7 @@ DATABASE_URL = f"mysql+pymysql://{DB_USER}:{DB_PASSWORD}@{DB_HOST}:{DB_PORT}/{DB
 
 engine = create_engine(
     DATABASE_URL,
-    connect_args={"ssl": {"ssl_mode": "REQUIRED"}}
+    connect_args={"ssl": {}}
 )
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
